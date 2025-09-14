@@ -1,14 +1,52 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React, { useState } from 'react';
+import Landing from './Landing';
+import Auth from './Auth';
+import UserDashboard from './UserDashboard';
+import ProfessionalDashboard from './ProfessionalDashboard';
+
+type AppState = 'landing' | 'auth' | 'user-dashboard' | 'professional-dashboard';
+type UserRole = 'user' | 'professional';
 
 const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
+  const [appState, setAppState] = useState<AppState>('landing');
+  const [userRole, setUserRole] = useState<UserRole>('user');
+
+  const handleRoleSelect = (role: UserRole) => {
+    setUserRole(role);
+    setAppState('auth');
+  };
+
+  const handleAuthSuccess = (role: UserRole) => {
+    setUserRole(role);
+    setAppState(role === 'user' ? 'user-dashboard' : 'professional-dashboard');
+  };
+
+  const handleLogout = () => {
+    setAppState('landing');
+  };
+
+  const handleBackToLanding = () => {
+    setAppState('landing');
+  };
+
+  switch (appState) {
+    case 'landing':
+      return <Landing onRoleSelect={handleRoleSelect} />;
+    case 'auth':
+      return (
+        <Auth 
+          role={userRole} 
+          onBack={handleBackToLanding} 
+          onAuthSuccess={handleAuthSuccess} 
+        />
+      );
+    case 'user-dashboard':
+      return <UserDashboard onLogout={handleLogout} />;
+    case 'professional-dashboard':
+      return <ProfessionalDashboard onLogout={handleLogout} />;
+    default:
+      return <Landing onRoleSelect={handleRoleSelect} />;
+  }
 };
 
 export default Index;
