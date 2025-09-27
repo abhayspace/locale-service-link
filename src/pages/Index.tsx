@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Landing from './Landing';
 import Auth from './Auth';
-import UserDashboard from './UserDashboard';
-import ProfessionalDashboard from './ProfessionalDashboard';
+import MobileUserDashboard from './MobileUserDashboard';
+import MobileProfessionalDashboard from './MobileProfessionalDashboard';
 
 type AppState = 'landing' | 'auth' | 'user-dashboard' | 'professional-dashboard';
 type UserRole = 'user' | 'professional';
@@ -41,9 +41,9 @@ const Index = () => {
         />
       );
     case 'user-dashboard':
-      return <UserDashboard onLogout={handleLogout} />;
+      return <MobileUserDashboard onLogout={handleLogout} />;
     case 'professional-dashboard':
-      return <ProfessionalDashboard onLogout={handleLogout} />;
+      return <MobileProfessionalDashboard onLogout={handleLogout} />;
     default:
       return <Landing onRoleSelect={handleRoleSelect} />;
   }

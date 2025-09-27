@@ -62,6 +62,11 @@
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
+    /* Mobile Native Spacing */
+    --mobile-padding: 1rem;
+    --mobile-safe-area-top: env(safe-area-inset-top, 0px);
+    --mobile-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
@@ -127,5 +132,52 @@
 
   body {
     @apply bg-background text-foreground;
+    /* Mobile optimizations */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevent iOS bounce scroll */
+    overscroll-behavior: none;
+    /* Hide scrollbars on mobile */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Mobile safe area utilities */
+  .safe-area-pt-4 {
+    padding-top: max(1rem, var(--mobile-safe-area-top));
+  }
+
+  .safe-area-pb-4 {
+    padding-bottom: max(1rem, var(--mobile-safe-area-bottom));
+  }
+
+  /* Mobile-first container */
+  .mobile-container {
+    @apply px-4 py-6 pb-20;
+  }
+
+  /* Native mobile animations */
+  .mobile-card {
+    @apply rounded-xl shadow-soft bg-card border border-border/50;
+    backdrop-filter: blur(10px);
+  }
+
+  .mobile-button {
+    @apply rounded-full font-medium transition-all duration-200;
+    touch-action: manipulation;
+  }
+
+  .mobile-button:active {
+    transform: scale(0.98);
+  }
+
+  /* Smooth scrolling for mobile */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 }
