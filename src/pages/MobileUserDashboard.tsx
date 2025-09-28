@@ -164,9 +164,7 @@ const MobileUserDashboard: React.FC<MobileUserDashboardProps> = ({ onLogout }) =
         {activeTab === 'search' && (
           <div className="p-4">
             <SearchFilters
-              filters={filters}
               onFiltersChange={setFilters}
-              professionals={professionals}
             />
           </div>
         )}
