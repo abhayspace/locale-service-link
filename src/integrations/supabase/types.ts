@@ -211,6 +211,101 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          booking_id: string | null
+          comment: string | null
+          created_at: string | null
+          id: string
+          professional_id: string
+          rating: number
+          reviewer_id: string
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          booking_id?: string | null
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          professional_id: string
+          rating: number
+          reviewer_id: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          booking_id?: string | null
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          professional_id?: string
+          rating?: number
+          reviewer_id?: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_requests: {
+        Row: {
+          budget_max: number | null
+          budget_min: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          location: string
+          preferred_date: string | null
+          preferred_time: string | null
+          service_type: string
+          status: string | null
+          title: string
+          updated_at: string | null
+          urgency: string | null
+          user_id: string
+        }
+        Insert: {
+          budget_max?: number | null
+          budget_min?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          location: string
+          preferred_date?: string | null
+          preferred_time?: string | null
+          service_type: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          urgency?: string | null
+          user_id: string
+        }
+        Update: {
+          budget_max?: number | null
+          budget_min?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          location?: string
+          preferred_date?: string | null
+          preferred_time?: string | null
+          service_type?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          urgency?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       professional_public_profiles: {
