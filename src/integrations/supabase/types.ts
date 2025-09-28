@@ -213,7 +213,27 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      professional_public_profiles: {
+        Row: {
+          availability: string | null
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          full_name: string | null
+          hourly_rate: number | null
+          id: string | null
+          location: string | null
+          photos: string[] | null
+          rating: number | null
+          service_type: string | null
+          skills: string[] | null
+          total_jobs: number | null
+          updated_at: string | null
+          user_id: string | null
+          user_type: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
