@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Star, Shield, Clock, MapPin, Search, User, Network, Zap, Users, CheckCircle, Award, Phone, Mail, MessageCircle, Heart, Globe } from 'lucide-react';
-import heroImage from '@/assets/hero-services.jpg';
 
 const serviceCategories = [
   { 
@@ -146,7 +145,7 @@ const Landing: React.FC<LandingProps> = ({ onRoleSelect }) => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-16 lg:py-24 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      <section className="relative py-20 lg:py-32 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-50">
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto text-center space-y-8 animate-fade-in">
@@ -207,25 +206,31 @@ const Landing: React.FC<LandingProps> = ({ onRoleSelect }) => {
                 Local Community
               </div>
             </div>
-          </div>
 
-          {/* Hero Image */}
-          <div className="relative mt-16 animate-scale-in max-w-4xl mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-20 rounded-3xl blur-3xl transform scale-110" />
-            <img 
-              src={heroImage} 
-              alt="Professional service providers at work" 
-              className="rounded-3xl shadow-2xl w-full h-auto relative z-10 border border-blue-100"
-            />
-            <div className="absolute -top-6 -right-6 bg-white/95 backdrop-blur-xl border border-blue-100 p-6 rounded-2xl shadow-xl">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600">
-                  <CheckCircle className="h-5 w-5 text-white" />
+            {/* Professional Feature Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto pt-12">
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all group">
+                <div className="p-3 rounded-full bg-blue-100 w-fit mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
+                  <Zap className="h-6 w-6 text-blue-600" />
                 </div>
-                <div>
-                  <div className="font-semibold text-gray-900">Quality Guaranteed</div>
-                  <div className="text-sm text-gray-600">100% satisfaction promise</div>
+                <h3 className="font-semibold text-gray-900 mb-2">Instant Matching</h3>
+                <p className="text-gray-600 text-sm">Get matched with verified professionals in under 60 seconds</p>
+              </div>
+              
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all group">
+                <div className="p-3 rounded-full bg-emerald-100 w-fit mx-auto mb-4 group-hover:bg-emerald-200 transition-colors">
+                  <Shield className="h-6 w-6 text-emerald-600" />
                 </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Secure Payments</h3>
+                <p className="text-gray-600 text-sm">Protected transactions with money-back guarantee</p>
+              </div>
+              
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all group">
+                <div className="p-3 rounded-full bg-amber-100 w-fit mx-auto mb-4 group-hover:bg-amber-200 transition-colors">
+                  <Award className="h-6 w-6 text-amber-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Quality Assured</h3>
+                <p className="text-gray-600 text-sm">All professionals vetted with background checks</p>
               </div>
             </div>
           </div>
