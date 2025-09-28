@@ -41,7 +41,13 @@ const Auth: React.FC<AuthProps> = ({ role, onBack, onAuthSuccess }) => {
           password: formData.password,
         });
 
-        if (error) throw error;
+        if (error) {
+          // Handle specific login errors
+          if (error.message.includes('Invalid login credentials')) {
+            throw new Error('Invalid email or password. Please check your credentials and try again.');
+          }
+          throw error;
+        }
 
         toast({
           title: "Welcome back!",
@@ -50,6 +56,17 @@ const Auth: React.FC<AuthProps> = ({ role, onBack, onAuthSuccess }) => {
 
         onAuthSuccess(role);
       } else {
+        // Validate form data
+        if (!formData.name.trim()) {
+          throw new Error('Please enter your full name.');
+        }
+        if (!formData.phone.trim()) {
+          throw new Error('Please enter your phone number.');
+        }
+        if (role === 'professional' && !formData.serviceType.trim()) {
+          throw new Error('Please enter your service type.');
+        }
+
         // Sign up
         const { data, error } = await supabase.auth.signUp({
           email: formData.email,
@@ -64,9 +81,17 @@ const Auth: React.FC<AuthProps> = ({ role, onBack, onAuthSuccess }) => {
           }
         });
 
-        if (error) throw error;
+        if (error) {
+          if (error.message.includes('already registered')) {
+            throw new Error('This email is already registered. Please try signing in instead.');
+          }
+          throw error;
+        }
 
         if (data.user) {
+          // Small delay to ensure auth state is fully set
+          await new Promise(resolve => setTimeout(resolve, 1000));
+
           // Create profile
           const { error: profileError } = await supabase
             .from('profiles')
@@ -77,7 +102,10 @@ const Auth: React.FC<AuthProps> = ({ role, onBack, onAuthSuccess }) => {
               user_type: role,
             });
 
-          if (profileError) throw profileError;
+          if (profileError) {
+            console.error('Profile creation error:', profileError);
+            throw new Error('Failed to create profile. Please try again.');
+          }
 
           // If professional, create professional profile and upload photos
           if (role === 'professional') {
@@ -113,12 +141,15 @@ const Auth: React.FC<AuthProps> = ({ role, onBack, onAuthSuccess }) => {
                 photos: photoUrls,
               });
 
-            if (professionalError) throw professionalError;
+            if (professionalError) {
+              console.error('Professional profile error:', professionalError);
+              throw new Error('Failed to create professional profile. Please try again.');
+            }
           }
 
           toast({
             title: "Account created!",
-            description: "Please check your email to verify your account.",
+            description: "Welcome to ServiceConnect! You can start using the platform now.",
           });
 
           onAuthSuccess(role);

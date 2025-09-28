@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Star, Shield, Clock, MapPin, Search, User, Wrench } from 'lucide-react';
+import { ArrowRight, Star, Shield, Clock, MapPin, Search, User, Wrench, Zap, Users, CheckCircle, Award } from 'lucide-react';
 import heroImage from '@/assets/hero-services.jpg';
 
 const serviceCategories = [
@@ -55,23 +55,34 @@ const features = [
   {
     icon: Shield,
     title: 'Verified Professionals',
-    description: 'All service providers are background-checked and verified'
+    description: 'Background-checked and verified service providers you can trust',
+    color: 'text-emerald-500'
   },
   {
     icon: Star,
-    title: 'Rated & Reviewed',
-    description: 'See real reviews from previous customers'
+    title: 'Quality Guaranteed',
+    description: 'Real reviews and ratings from satisfied customers',
+    color: 'text-amber-500'
   },
   {
-    icon: Clock,
-    title: 'Quick Booking',
-    description: 'Book services instantly or schedule for later'
+    icon: Zap,
+    title: 'Instant Booking',
+    description: 'Book services in seconds or schedule for your convenience',
+    color: 'text-blue-500'
   },
   {
-    icon: MapPin,
-    title: 'Local Services',
-    description: 'Find professionals in your area'
+    icon: Users,
+    title: 'Local Network',
+    description: 'Connect with trusted professionals in your community',
+    color: 'text-purple-500'
   }
+];
+
+const stats = [
+  { number: '10K+', label: 'Happy Customers', icon: Users },
+  { number: '5K+', label: 'Professionals', icon: Award },
+  { number: '50K+', label: 'Jobs Completed', icon: CheckCircle },
+  { number: '4.9★', label: 'Average Rating', icon: Star }
 ];
 
 interface LandingProps {
@@ -84,91 +95,105 @@ const Landing: React.FC<LandingProps> = ({ onRoleSelect }) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b bg-glass backdrop-blur-xl sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Wrench className="h-8 w-8 text-primary" />
-            <h1 className="text-xl font-bold text-foreground">ServiceConnect</h1>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-gradient-primary">
+              <Wrench className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-foreground">ServiceConnect</h1>
+              <p className="text-xs text-muted-foreground">Professional Services Hub</p>
+            </div>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" onClick={() => onRoleSelect('user')}>
+            <Button variant="ghost" onClick={() => onRoleSelect('user')} className="hidden sm:flex">
               <User className="h-4 w-4 mr-2" />
               Sign In
             </Button>
             <Button variant="hero" onClick={() => onRoleSelect('professional')}>
-              Join as Professional
+              <span className="hidden sm:inline">Join as </span>Professional
             </Button>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-hero-gradient opacity-5" />
-        <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8 animate-fade-in-up">
-            <div className="space-y-4">
-              <Badge className="bg-primary/10 text-primary border-primary/20">
-                🌟 Connecting Local Communities
-              </Badge>
-              <h2 className="text-4xl lg:text-6xl font-bold text-foreground leading-tight">
-                Find <span className="text-primary">Local</span> Service Professionals
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-lg">
-                Connect with verified electricians, plumbers, tutors, and more in your area. 
-                Book services instantly or get quotes.
-              </p>
-            </div>
+      <section className="relative py-20 lg:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-subtle opacity-50" />
+        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in-up">
+            <Badge className="bg-glass border-primary/30 text-primary backdrop-blur-sm">
+              <Star className="h-3 w-3 mr-1" />
+              Trusted by 10,000+ customers
+            </Badge>
             
-            <div className="flex flex-col sm:flex-row gap-4">
+            <h1 className="text-5xl lg:text-7xl font-bold text-foreground leading-tight">
+              Connect with
+              <span className="block bg-gradient-primary bg-clip-text text-transparent">
+                Local Professionals
+              </span>
+            </h1>
+            
+            <p className="text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto">
+              From home repairs to tutoring, find trusted professionals in your area. 
+              Instant booking, verified providers, guaranteed quality.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button 
                 variant="hero" 
                 size="lg" 
                 onClick={() => onRoleSelect('user')}
-                className="group"
+                className="group shadow-elegant"
               >
+                <Search className="h-5 w-5 mr-2" />
                 Find Services
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button 
                 variant="professional" 
                 size="lg" 
                 onClick={() => onRoleSelect('professional')}
+                className="shadow-elegant"
               >
-                Become a Pro
+                <Wrench className="h-5 w-5 mr-2" />
+                Join as Professional
               </Button>
             </div>
 
-            {/* Quick Stats */}
-            <div className="flex items-center gap-8 pt-8 border-t border-border/50">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">🚀</div>
-                <div className="text-sm text-muted-foreground">Getting Started</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">⭐</div>
-                <div className="text-sm text-muted-foreground flex items-center gap-1">
-                  Quality Service
+            {/* Stats Row */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-16 border-t border-border/50">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center animate-scale-in" style={{ animationDelay: `${index * 100}ms` }}>
+                  <div className="flex justify-center mb-2">
+                    <stat.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="text-2xl lg:text-3xl font-bold text-foreground">{stat.number}</div>
+                  <div className="text-sm text-muted-foreground">{stat.label}</div>
                 </div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">🤝</div>
-                <div className="text-sm text-muted-foreground">Local Community</div>
-              </div>
+              ))}
             </div>
           </div>
 
-          <div className="relative animate-scale-in">
+          {/* Hero Image */}
+          <div className="relative mt-20 animate-scale-in max-w-4xl mx-auto">
+            <div className="absolute inset-0 bg-gradient-primary opacity-20 rounded-3xl blur-3xl transform scale-110" />
             <img 
               src={heroImage} 
-              alt="Local service professionals at work" 
-              className="rounded-2xl shadow-strong w-full h-auto"
+              alt="Professional service providers at work" 
+              className="rounded-3xl shadow-massive w-full h-auto relative z-10"
             />
-            <div className="absolute -top-4 -right-4 bg-success text-success-foreground p-4 rounded-xl shadow-medium">
-              <div className="text-sm font-medium">ServiceConnect</div>
-              <div className="flex items-center gap-1">
-                <Wrench className="h-4 w-4 fill-current" />
-                <span className="font-bold">Pro</span>
+            <div className="absolute -top-6 -right-6 bg-glass backdrop-blur-xl border border-border/20 p-6 rounded-2xl shadow-elegant">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-primary">
+                  <CheckCircle className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <div className="font-semibold text-foreground">Quality Guaranteed</div>
+                  <div className="text-sm text-muted-foreground">Verified professionals</div>
+                </div>
               </div>
             </div>
           </div>
@@ -237,12 +262,15 @@ const Landing: React.FC<LandingProps> = ({ onRoleSelect }) => {
       </section>
 
       {/* Features */}
-      <section className="py-20">
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-foreground mb-4">Why Choose ServiceConnect?</h3>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              We make it easy to find trusted professionals and get your projects done right.
+          <div className="text-center mb-16">
+            <Badge className="bg-glass border-primary/30 text-primary backdrop-blur-sm mb-4">
+              Why ServiceConnect?
+            </Badge>
+            <h3 className="text-4xl font-bold text-foreground mb-6">Built for trust and convenience</h3>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              We've created the safest and easiest way to connect with local service professionals.
             </p>
           </div>
 
@@ -250,14 +278,16 @@ const Landing: React.FC<LandingProps> = ({ onRoleSelect }) => {
             {features.map((feature, index) => (
               <div 
                 key={index}
-                className="text-center group animate-fade-in-up"
+                className="group animate-fade-in-up bg-glass backdrop-blur-sm rounded-2xl p-6 border border-border/50 hover:border-primary/30 transition-all"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
-                <div className="bg-primary/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-                  <feature.icon className="h-8 w-8 text-primary mx-auto" />
+                <div className="mb-4">
+                  <div className={`p-3 rounded-xl w-fit ${feature.color.replace('text-', 'bg-')}/10`}>
+                    <feature.icon className={`h-6 w-6 ${feature.color}`} />
+                  </div>
                 </div>
-                <h4 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h4>
-                <p className="text-muted-foreground text-sm">{feature.description}</p>
+                <h4 className="text-lg font-semibold text-foreground mb-3">{feature.title}</h4>
+                <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -265,28 +295,64 @@ const Landing: React.FC<LandingProps> = ({ onRoleSelect }) => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary/5">
+      <section className="py-20 lg:py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-primary opacity-5" />
         <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto space-y-6">
-            <h3 className="text-4xl font-bold text-foreground">Ready to Get Started?</h3>
-            <p className="text-xl text-muted-foreground">
-              Join thousands of satisfied customers and professionals on our platform.
+          <div className="max-w-4xl mx-auto space-y-8">
+            <Badge className="bg-glass border-primary/30 text-primary backdrop-blur-sm">
+              <Zap className="h-3 w-3 mr-1" />
+              Get started in minutes
+            </Badge>
+            
+            <h3 className="text-4xl lg:text-5xl font-bold text-foreground">
+              Your next great service experience
+              <span className="block text-primary">starts here</span>
+            </h3>
+            
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Join thousands who trust ServiceConnect for quality home services and professional opportunities.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button 
                 variant="hero" 
                 size="lg" 
                 onClick={() => onRoleSelect('user')}
+                className="shadow-elegant group"
               >
-                Book a Service
+                <Search className="h-5 w-5 mr-2" />
+                Find Services Now
+                <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button 
                 variant="professional" 
                 size="lg" 
                 onClick={() => onRoleSelect('professional')}
+                className="shadow-elegant"
               >
-                Offer Your Services
+                <Award className="h-5 w-5 mr-2" />
+                Start Earning Today
               </Button>
+            </div>
+
+            {/* Trust indicators */}
+            <div className="flex flex-wrap justify-center items-center gap-8 pt-12 opacity-60">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Shield className="h-4 w-4" />
+                Fully Insured
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <CheckCircle className="h-4 w-4" />
+                Background Checked
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Star className="h-4 w-4" />
+                4.9/5 Rating
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Users className="h-4 w-4" />
+                10K+ Happy Customers
+              </div>
             </div>
           </div>
         </div>
