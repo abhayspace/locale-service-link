@@ -12,42 +12,42 @@ const serviceCategories = [
     name: 'Electrician', 
     icon: '⚡', 
     description: 'Electrical repairs & installations',
-    count: '45+ professionals'
+    count: 'Available'
   },
   { 
     id: 'plumber', 
     name: 'Plumber', 
     icon: '🔧', 
     description: 'Plumbing repairs & maintenance',
-    count: '38+ professionals'
+    count: 'Available'
   },
   { 
     id: 'tutor', 
     name: 'Tutor', 
     icon: '📚', 
     description: 'Academic & skill tutoring',
-    count: '62+ professionals'
+    count: 'Available'
   },
   { 
     id: 'carpenter', 
     name: 'Carpenter', 
     icon: '🔨', 
     description: 'Furniture & woodwork',
-    count: '29+ professionals'
+    count: 'Available'
   },
   { 
     id: 'cleaner', 
     name: 'House Cleaning', 
     icon: '🧽', 
     description: 'Deep cleaning services',
-    count: '51+ professionals'
+    count: 'Available'
   },
   { 
     id: 'painter', 
     name: 'Painter', 
     icon: '🎨', 
     description: 'Interior & exterior painting',
-    count: '33+ professionals'
+    count: 'Available'
   },
 ];
 
@@ -109,7 +109,7 @@ const Landing: React.FC<LandingProps> = ({ onRoleSelect }) => {
           <div className="space-y-8 animate-fade-in-up">
             <div className="space-y-4">
               <Badge className="bg-primary/10 text-primary border-primary/20">
-                🌟 Trusted by 10,000+ customers
+                🌟 Connecting Local Communities
               </Badge>
               <h2 className="text-4xl lg:text-6xl font-bold text-foreground leading-tight">
                 Find <span className="text-primary">Local</span> Service Professionals
@@ -142,19 +142,18 @@ const Landing: React.FC<LandingProps> = ({ onRoleSelect }) => {
             {/* Quick Stats */}
             <div className="flex items-center gap-8 pt-8 border-t border-border/50">
               <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">250+</div>
-                <div className="text-sm text-muted-foreground">Active Professionals</div>
+                <div className="text-2xl font-bold text-foreground">🚀</div>
+                <div className="text-sm text-muted-foreground">Getting Started</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">4.8</div>
+                <div className="text-2xl font-bold text-foreground">⭐</div>
                 <div className="text-sm text-muted-foreground flex items-center gap-1">
-                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                  Average Rating
+                  Quality Service
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-foreground">5k+</div>
-                <div className="text-sm text-muted-foreground">Jobs Completed</div>
+                <div className="text-2xl font-bold text-foreground">🤝</div>
+                <div className="text-sm text-muted-foreground">Local Community</div>
               </div>
             </div>
           </div>
@@ -166,10 +165,10 @@ const Landing: React.FC<LandingProps> = ({ onRoleSelect }) => {
               className="rounded-2xl shadow-strong w-full h-auto"
             />
             <div className="absolute -top-4 -right-4 bg-success text-success-foreground p-4 rounded-xl shadow-medium">
-              <div className="text-sm font-medium">Top Rated</div>
+              <div className="text-sm font-medium">ServiceConnect</div>
               <div className="flex items-center gap-1">
-                <Star className="h-4 w-4 fill-current" />
-                <span className="font-bold">4.9/5</span>
+                <Wrench className="h-4 w-4 fill-current" />
+                <span className="font-bold">Pro</span>
               </div>
             </div>
           </div>

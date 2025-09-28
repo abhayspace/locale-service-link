@@ -14,39 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      activities: {
-        Row: {
-          activity_type: string
-          created_at: string
-          description: string | null
-          id: string
-          metadata: Json | null
-          read_at: string | null
-          title: string
-          user_id: string
-        }
-        Insert: {
-          activity_type: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          metadata?: Json | null
-          read_at?: string | null
-          title: string
-          user_id: string
-        }
-        Update: {
-          activity_type?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          metadata?: Json | null
-          read_at?: string | null
-          title?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       bookings: {
         Row: {
           created_at: string
@@ -170,6 +137,7 @@ export type Database = {
           created_at: string
           hourly_rate: number | null
           id: string
+          photos: string[] | null
           rating: number | null
           service_type: string
           skills: string[] | null
@@ -183,6 +151,7 @@ export type Database = {
           created_at?: string
           hourly_rate?: number | null
           id?: string
+          photos?: string[] | null
           rating?: number | null
           service_type: string
           skills?: string[] | null
@@ -196,6 +165,7 @@ export type Database = {
           created_at?: string
           hourly_rate?: number | null
           id?: string
+          photos?: string[] | null
           rating?: number | null
           service_type?: string
           skills?: string[] | null

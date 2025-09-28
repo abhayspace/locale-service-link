@@ -4,7 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, User, Wrench, Mail, Lock, Phone } from 'lucide-react';
+import { ArrowLeft, User, Wrench, Mail, Lock, Phone, Upload, X, Camera } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface AuthProps {
   role: 'user' | 'professional';
@@ -14,21 +16,147 @@ interface AuthProps {
 
 const Auth: React.FC<AuthProps> = ({ role, onBack, onAuthSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [uploadedPhotos, setUploadedPhotos] = useState<File[]>([]);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     name: '',
     phone: '',
+    serviceType: '',
+    bio: '',
+    hourlyRate: '',
+    skills: '',
   });
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement actual authentication with Supabase
-    onAuthSuccess(role);
+    setLoading(true);
+
+    try {
+      if (isLogin) {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+
+        if (error) throw error;
+
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully signed in.",
+        });
+
+        onAuthSuccess(role);
+      } else {
+        // Sign up
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: {
+              full_name: formData.name,
+              phone: formData.phone,
+              user_type: role,
+            }
+          }
+        });
+
+        if (error) throw error;
+
+        if (data.user) {
+          // Create profile
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert({
+              user_id: data.user.id,
+              full_name: formData.name,
+              phone: formData.phone,
+              user_type: role,
+            });
+
+          if (profileError) throw profileError;
+
+          // If professional, create professional profile and upload photos
+          if (role === 'professional') {
+            let photoUrls: string[] = [];
+
+            // Upload photos if any
+            if (uploadedPhotos.length > 0) {
+              for (const photo of uploadedPhotos) {
+                const fileExt = photo.name.split('.').pop();
+                const fileName = `${data.user.id}/${Date.now()}.${fileExt}`;
+                
+                const { error: uploadError } = await supabase.storage
+                  .from('professional-photos')
+                  .upload(fileName, photo);
+
+                if (!uploadError) {
+                  const { data: urlData } = supabase.storage
+                    .from('professional-photos')
+                    .getPublicUrl(fileName);
+                  photoUrls.push(urlData.publicUrl);
+                }
+              }
+            }
+
+            const { error: professionalError } = await supabase
+              .from('professional_profiles')
+              .insert({
+                user_id: data.user.id,
+                service_type: formData.serviceType,
+                bio: formData.bio,
+                hourly_rate: formData.hourlyRate ? parseFloat(formData.hourlyRate) : null,
+                skills: formData.skills ? formData.skills.split(',').map(s => s.trim()) : [],
+                photos: photoUrls,
+              });
+
+            if (professionalError) throw professionalError;
+          }
+
+          toast({
+            title: "Account created!",
+            description: "Please check your email to verify your account.",
+          });
+
+          onAuthSuccess(role);
+        }
+      }
+    } catch (error: any) {
+      console.error('Auth error:', error);
+      toast({
+        title: "Authentication Error",
+        description: error.message || "An error occurred during authentication.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      if (uploadedPhotos.length + newFiles.length > 5) {
+        toast({
+          title: "Too many photos",
+          description: "You can upload a maximum of 5 photos.",
+          variant: "destructive",
+        });
+        return;
+      }
+      setUploadedPhotos(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const removePhoto = (index: number) => {
+    setUploadedPhotos(prev => prev.filter((_, i) => i !== index));
   };
 
   const roleConfig = {
@@ -175,6 +303,100 @@ const Auth: React.FC<AuthProps> = ({ role, onBack, onAuthSuccess }) => {
                   </div>
                 )}
 
+                {!isLogin && role === 'professional' && (
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="serviceType">Service Type</Label>
+                      <Input
+                        id="serviceType"
+                        placeholder="e.g., Electrician, Plumber, Tutor"
+                        value={formData.serviceType}
+                        onChange={(e) => handleInputChange('serviceType', e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="bio">Bio (Optional)</Label>
+                      <Input
+                        id="bio"
+                        placeholder="Brief description of your services"
+                        value={formData.bio}
+                        onChange={(e) => handleInputChange('bio', e.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="hourlyRate">Hourly Rate (Optional)</Label>
+                      <Input
+                        id="hourlyRate"
+                        type="number"
+                        placeholder="Enter your hourly rate"
+                        value={formData.hourlyRate}
+                        onChange={(e) => handleInputChange('hourlyRate', e.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="skills">Skills (Optional)</Label>
+                      <Input
+                        id="skills"
+                        placeholder="Comma-separated skills (e.g., electrical, plumbing)"
+                        value={formData.skills}
+                        onChange={(e) => handleInputChange('skills', e.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Photos (Optional - Max 5)</Label>
+                      <div className="border-2 border-dashed border-border rounded-lg p-4">
+                        <div className="text-center">
+                          <Camera className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                          <Label htmlFor="photos" className="cursor-pointer">
+                            <span className="text-sm text-primary hover:text-primary/80">
+                              Click to upload photos
+                            </span>
+                            <Input
+                              id="photos"
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              onChange={handlePhotoUpload}
+                              className="hidden"
+                            />
+                          </Label>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Upload photos of your work or profile (JPG, PNG)
+                          </p>
+                        </div>
+
+                        {uploadedPhotos.length > 0 && (
+                          <div className="grid grid-cols-3 gap-2 mt-4">
+                            {uploadedPhotos.map((photo, index) => (
+                              <div key={index} className="relative">
+                                <img
+                                  src={URL.createObjectURL(photo)}
+                                  alt={`Upload ${index + 1}`}
+                                  className="w-full h-20 object-cover rounded border"
+                                />
+                                <Button
+                                  type="button"
+                                  variant="destructive"
+                                  size="sm"
+                                  className="absolute -top-2 -right-2 h-6 w-6 p-0"
+                                  onClick={() => removePhoto(index)}
+                                >
+                                  <X className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <div className="relative">
@@ -196,8 +418,9 @@ const Auth: React.FC<AuthProps> = ({ role, onBack, onAuthSuccess }) => {
                   variant={config.variant}
                   className="w-full"
                   size="lg"
+                  disabled={loading}
                 >
-                  {isLogin ? 'Sign In' : 'Create Account'}
+                  {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
                 </Button>
               </form>
 

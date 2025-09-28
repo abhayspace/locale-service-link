@@ -3,7 +3,7 @@ import { MobileHeader } from '@/components/ui/mobile-header';
 import { BottomNavigation } from '@/components/ui/bottom-navigation';
 import { MessagesList } from '@/components/messaging/MessagesList';
 import { ChatInterface } from '@/components/messaging/ChatInterface';
-import { ActivityFeed } from '@/components/activity/ActivityFeed';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -371,8 +371,16 @@ const MobileProfessionalDashboard: React.FC<MobileProfessionalDashboardProps> = 
   };
 
   const renderActivityContent = () => (
-    <div className="h-full">
-      <ActivityFeed className="pb-20" />
+    <div className="mobile-container space-y-6">
+      <div className="flex flex-col items-center justify-center p-8 text-center">
+        <Briefcase className="h-12 w-12 text-muted-foreground mb-4" />
+        <h3 className="text-lg font-semibold text-foreground mb-2">
+          Your job history will appear here
+        </h3>
+        <p className="text-muted-foreground">
+          Track completed jobs and earnings
+        </p>
+      </div>
     </div>
   );
 
