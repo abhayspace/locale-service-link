@@ -86,7 +86,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ onLogout }) => {
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-foreground">ServiceConnect</h1>
+            <h1 className="text-xl font-bold text-foreground">ProConnect</h1>
             <Badge variant="user">Customer</Badge>
           </div>
           <div className="flex items-center gap-3">

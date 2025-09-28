@@ -89,23 +89,9 @@ const Auth: React.FC<AuthProps> = ({ role, onBack, onAuthSuccess }) => {
         }
 
         if (data.user) {
-          // Small delay to ensure auth state is fully set
-          await new Promise(resolve => setTimeout(resolve, 1000));
-
-          // Create profile
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .insert({
-              user_id: data.user.id,
-              full_name: formData.name,
-              phone: formData.phone,
-              user_type: role,
-            });
-
-          if (profileError) {
-            console.error('Profile creation error:', profileError);
-            throw new Error('Failed to create profile. Please try again.');
-          }
+          // Profile is now created automatically via trigger
+          // No need to manually create profile - just wait a moment for the trigger
+          await new Promise(resolve => setTimeout(resolve, 500));
 
           // If professional, create professional profile and upload photos
           if (role === 'professional') {
@@ -149,7 +135,7 @@ const Auth: React.FC<AuthProps> = ({ role, onBack, onAuthSuccess }) => {
 
           toast({
             title: "Account created!",
-            description: "Welcome to ServiceConnect! You can start using the platform now.",
+            description: "Welcome to ProConnect! You can start using the platform now.",
           });
 
           onAuthSuccess(role);

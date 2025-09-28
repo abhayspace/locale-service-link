@@ -6,85 +6,86 @@
 
 @layer base {
   :root {
-    --background: 250 100% 99%;
-    --foreground: 215 25% 15%;
+    /* Blue-White Theme - Professional Service Platform */
+    --background: 0 0% 100%;
+    --foreground: 220 26% 14%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    --card-foreground: 220 26% 14%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
+    --popover-foreground: 220 26% 14%;
 
     /* Primary: Professional Blue */
-    --primary: 215 80% 45%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 215 80% 55%;
-    --primary-dark: 215 80% 35%;
+    --primary-light: 221 83% 63%;
+    --primary-dark: 221 83% 43%;
 
     /* Success: Trust Green */
-    --success: 145 70% 45%;
+    --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
-    --success-light: 145 70% 55%;
+    --success-light: 142 76% 46%;
 
-    /* Warning: Attention Orange */
-    --warning: 35 90% 55%;
+    /* Warning: Attention Amber */
+    --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --secondary: 215 20% 96%;
-    --secondary-foreground: 215 25% 25%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 220 26% 14%;
 
-    --muted: 215 15% 95%;
-    --muted-foreground: 215 15% 45%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 195 85% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 210 40% 94%;
+    --accent-foreground: 220 26% 14%;
 
-    --destructive: 0 75% 55%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 15% 90%;
-    --input: 215 15% 92%;
-    --ring: 215 80% 45%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 221 83% 53%;
 
-/* Custom Service App Colors */
-    --hero-gradient: linear-gradient(135deg, hsl(215 80% 45%) 0%, hsl(195 85% 50%) 100%);
-    --card-gradient: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(215 20% 98%) 100%);
-    --glass-gradient: linear-gradient(145deg, hsl(0 0% 100% / 0.1) 0%, hsl(215 20% 98% / 0.05) 100%);
-    --service-card: 215 25% 97%;
-    --professional-badge: 145 70% 45%;
-    --user-badge: 215 80% 45%;
-    --premium-gradient: linear-gradient(135deg, hsl(280 100% 70%) 0%, hsl(260 100% 80%) 100%);
-    --success-gradient: linear-gradient(135deg, hsl(145 70% 45%) 0%, hsl(145 70% 55%) 100%);
-    --urgent-gradient: linear-gradient(135deg, hsl(0 75% 55%) 0%, hsl(35 90% 55%) 100%);
+/* Blue-White Theme Custom Colors */
+    --hero-gradient: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(221 83% 43%) 100%);
+    --card-gradient: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
+    --glass-gradient: linear-gradient(145deg, hsl(0 0% 100% / 0.95) 0%, hsl(210 40% 98% / 0.9) 100%);
+    --service-card: 210 40% 97%;
+    --professional-badge: 142 76% 36%;
+    --user-badge: 221 83% 53%;
+    --premium-gradient: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(221 83% 63%) 100%);
+    --success-gradient: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(142 76% 46%) 100%);
+    --urgent-gradient: linear-gradient(135deg, hsl(0 84% 60%) 0%, hsl(38 92% 50%) 100%);
     
-    /* Enhanced gradients for professional design */
-    --gradient-primary: linear-gradient(135deg, hsl(215 80% 45%) 0%, hsl(195 85% 50%) 100%);
-    --gradient-subtle: linear-gradient(180deg, hsl(250 100% 99%) 0%, hsl(215 15% 95% / 0.3) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(215 80% 45%) 0%, hsl(195 85% 50%) 100%);
-    --gradient-success: linear-gradient(135deg, hsl(145 70% 45%) 0%, hsl(145 70% 55%) 100%);
-    --gradient-professional: linear-gradient(135deg, hsl(145 70% 45%) 0%, hsl(145 70% 55%) 100%);
-    --gradient-user: linear-gradient(135deg, hsl(215 80% 45%) 0%, hsl(195 85% 50%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(215 20% 98%) 100%);
+    /* Enhanced gradients for blue-white theme */
+    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(221 83% 43%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 40% 96% / 0.3) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(221 83% 43%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(142 76% 46%) 100%);
+    --gradient-professional: linear-gradient(135deg, hsl(142 76% 36%) 0%, hsl(142 76% 46%) 100%);
+    --gradient-user: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(221 83% 43%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
     
     /* Glass and modern effects */
-    --bg-glass: hsl(0 0% 100% / 0.8);
-    --bg-grid-pattern: radial-gradient(circle at 1px 1px, hsl(215 80% 45% / 0.1) 1px, transparent 0);
+    --bg-glass: hsl(0 0% 100% / 0.95);
+    --bg-grid-pattern: radial-gradient(circle at 1px 1px, hsl(221 83% 53% / 0.08) 1px, transparent 0);
     
     /* Color glow variants */
-    --primary-glow: 195 85% 60%;
-    --success-glow: 145 70% 55%;
-    --professional-glow: 145 70% 55%;
-    --user-glow: 195 85% 60%;
-    
-    /* Shadows */
-    --shadow-soft: 0 2px 10px -2px hsl(215 25% 15% / 0.08);
-    --shadow-medium: 0 4px 20px -4px hsl(215 25% 15% / 0.12);
-    --shadow-strong: 0 8px 30px -6px hsl(215 25% 15% / 0.15);
-    --shadow-glow: 0 0 40px hsl(215 80% 45% / 0.3);
-    --shadow-success: 0 4px 20px -4px hsl(145 70% 45% / 0.25);
-    --shadow-premium: 0 8px 32px -8px hsl(280 100% 70% / 0.4);
-    --shadow-elegant: 0 10px 30px -10px hsl(215 80% 45% / 0.3);
-    --shadow-massive: 0 32px 64px -12px hsl(215 25% 15% / 0.3);
+    --primary-glow: 221 83% 63%;
+    --success-glow: 142 76% 46%;
+    --professional-glow: 142 76% 46%;
+    --user-glow: 221 83% 63%;
+
+    /* Enhanced shadows for blue-white theme */
+    --shadow-soft: 0 2px 10px -2px hsl(221 83% 53% / 0.08);
+    --shadow-medium: 0 4px 20px -4px hsl(221 83% 53% / 0.12);
+    --shadow-strong: 0 8px 30px -6px hsl(221 83% 53% / 0.15);
+    --shadow-glow: 0 0 40px hsl(221 83% 53% / 0.3);
+    --shadow-success: 0 4px 20px -4px hsl(142 76% 36% / 0.25);
+    --shadow-premium: 0 8px 32px -8px hsl(221 83% 53% / 0.4);
+    --shadow-elegant: 0 10px 30px -10px hsl(221 83% 53% / 0.3);
+    --shadow-massive: 0 32px 64px -12px hsl(220 26% 14% / 0.25);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
