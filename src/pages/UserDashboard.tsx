@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { useProfessionals } from '@/hooks/useProfessionals';
 import { 
   Search, 
   Filter, 
@@ -15,51 +16,14 @@ import {
   LogOut,
   Clock,
   CheckCircle,
-  XCircle
+  XCircle,
+  Loader2
 } from 'lucide-react';
 
 interface UserDashboardProps {
   onLogout: () => void;
 }
 
-const professionals = [
-  {
-    id: 1,
-    name: 'John Smith',
-    service: 'Electrician',
-    rating: 4.9,
-    reviews: 127,
-    hourlyRate: 75,
-    location: '2.3 km away',
-    avatar: '⚡',
-    skills: ['Wiring', 'Lighting', 'Panel Upgrades'],
-    availability: 'Available today'
-  },
-  {
-    id: 2,
-    name: 'Sarah Johnson',
-    service: 'Plumber',
-    rating: 4.8,
-    reviews: 89,
-    hourlyRate: 65,
-    location: '1.8 km away',
-    avatar: '🔧',
-    skills: ['Pipe Repair', 'Drain Cleaning', 'Installation'],
-    availability: 'Available tomorrow'
-  },
-  {
-    id: 3,
-    name: 'Mike Chen',
-    service: 'Tutor',
-    rating: 5.0,
-    reviews: 156,
-    hourlyRate: 45,
-    location: '0.9 km away',
-    avatar: '📚',
-    skills: ['Math', 'Physics', 'SAT Prep'],
-    availability: 'Available now'
-  }
-];
 
 const bookings = [
   {
@@ -94,6 +58,7 @@ const bookings = [
 const UserDashboard: React.FC<UserDashboardProps> = ({ onLogout }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'browse' | 'bookings'>('browse');
+  const { professionals, loading, error } = useProfessionals();
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -189,60 +154,89 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ onLogout }) => {
 
             {/* Professionals List */}
             <div className="grid gap-4">
-              {professionals.map((pro) => (
-                <Card key={pro.id} className="shadow-soft hover:shadow-medium transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex gap-4">
-                      <div className="text-4xl">{pro.avatar}</div>
-                      <div className="flex-1 space-y-2">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <h3 className="text-lg font-semibold text-foreground">{pro.name}</h3>
-                            <p className="text-primary font-medium">{pro.service}</p>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-2xl font-bold text-foreground">${pro.hourlyRate}</div>
-                            <div className="text-sm text-muted-foreground">per hour</div>
-                          </div>
+              {loading ? (
+                <div className="flex justify-center items-center py-8">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                </div>
+              ) : error ? (
+                <div className="text-center py-8">
+                  <p className="text-destructive mb-4">{error}</p>
+                  <Button variant="outline" onClick={() => window.location.reload()}>
+                    Try Again
+                  </Button>
+                </div>
+              ) : professionals.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">No professionals available at the moment.</p>
+                </div>
+              ) : (
+                professionals.map((pro) => (
+                  <Card key={pro.id} className="shadow-soft hover:shadow-medium transition-shadow">
+                    <CardContent className="p-6">
+                      <div className="flex gap-4">
+                        <div className="text-4xl">
+                          {pro.avatar_url ? (
+                            <img src={pro.avatar_url} alt={pro.full_name || 'Professional'} className="w-12 h-12 rounded-full object-cover" />
+                          ) : (
+                            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                              {pro.full_name?.charAt(0) || '?'}
+                            </div>
+                          )}
                         </div>
-
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                            <span className="font-medium">{pro.rating}</span>
-                            <span>({pro.reviews} reviews)</span>
+                        <div className="flex-1 space-y-2">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <h3 className="text-lg font-semibold text-foreground">{pro.full_name}</h3>
+                              <p className="text-primary font-medium">{pro.service_type}</p>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-2xl font-bold text-foreground">
+                                ${pro.hourly_rate || 0}
+                              </div>
+                              <div className="text-sm text-muted-foreground">per hour</div>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <MapPin className="h-4 w-4" />
-                            {pro.location}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            {pro.availability}
-                          </div>
-                        </div>
 
-                        <div className="flex flex-wrap gap-2">
-                          {pro.skills.map((skill, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs">
-                              {skill}
-                            </Badge>
-                          ))}
-                        </div>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                              <span className="font-medium">{pro.rating || 0}</span>
+                              <span>({pro.total_jobs || 0} jobs)</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <MapPin className="h-4 w-4" />
+                              {pro.location || 'Location not specified'}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              {pro.availability || 'Contact for availability'}
+                            </div>
+                          </div>
 
-                        <div className="flex gap-3 pt-2">
-                          <Button variant="default" className="flex-1">
-                            Book Service
-                          </Button>
-                          <Button variant="outline" size="icon">
-                            <MessageCircle className="h-4 w-4" />
-                          </Button>
+                          {pro.skills && pro.skills.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                              {pro.skills.map((skill, index) => (
+                                <Badge key={index} variant="secondary" className="text-xs">
+                                  {skill}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+
+                          <div className="flex gap-3 pt-2">
+                            <Button variant="default" className="flex-1">
+                              Book Service
+                            </Button>
+                            <Button variant="outline" size="icon">
+                              <MessageCircle className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                ))
+              )}
             </div>
           </div>
         )}

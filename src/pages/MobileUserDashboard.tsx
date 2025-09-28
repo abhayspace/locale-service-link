@@ -3,6 +3,7 @@ import { MobileHeader } from '@/components/ui/mobile-header';
 import { BottomNavigation } from '@/components/ui/bottom-navigation';
 import { MessagesList } from '@/components/messaging/MessagesList';
 import { ChatInterface } from '@/components/messaging/ChatInterface';
+import { useProfessionals } from '@/hooks/useProfessionals';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,7 +24,8 @@ import {
   Activity as ActivityIcon,
   Home,
   User,
-  ArrowLeft
+  ArrowLeft,
+  Loader2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -31,47 +33,6 @@ interface MobileUserDashboardProps {
   onLogout: () => void;
 }
 
-const professionals = [
-  {
-    id: 1,
-    name: 'John Smith',
-    service: 'Electrician',
-    rating: 4.9,
-    reviews: 127,
-    hourlyRate: 75,
-    location: '2.3 km away',
-    avatar: '⚡',
-    skills: ['Wiring', 'Lighting', 'Panel Upgrades'],
-    availability: 'Available today',
-    isOnline: true
-  },
-  {
-    id: 2,
-    name: 'Sarah Johnson',
-    service: 'Plumber',
-    rating: 4.8,
-    reviews: 89,
-    hourlyRate: 65,
-    location: '1.8 km away',
-    avatar: '🔧',
-    skills: ['Pipe Repair', 'Drain Cleaning', 'Installation'],
-    availability: 'Available tomorrow',
-    isOnline: false
-  },
-  {
-    id: 3,
-    name: 'Mike Chen',
-    service: 'Tutor',
-    rating: 5.0,
-    reviews: 156,
-    hourlyRate: 45,
-    location: '0.9 km away',
-    avatar: '📚',
-    skills: ['Math', 'Physics', 'SAT Prep'],
-    availability: 'Available now',
-    isOnline: true
-  }
-];
 
 const bookings = [
   {
@@ -102,6 +63,7 @@ const MobileUserDashboard: React.FC<MobileUserDashboardProps> = ({ onLogout }) =
     recipientName: string;
     recipientType: 'user' | 'professional';
   } | null>(null);
+  const { professionals, loading, error } = useProfessionals();
 
   const navigationItems = [
     { id: 'home', label: 'Home', icon: Home },
@@ -172,67 +134,94 @@ const MobileUserDashboard: React.FC<MobileUserDashboardProps> = ({ onLogout }) =
       <div>
         <h2 className="text-lg font-bold text-foreground mb-4">Available Now</h2>
         <div className="space-y-4">
-          {professionals.map((pro) => (
-            <Card key={pro.id} className="mobile-card">
-              <CardContent className="p-4">
-                <div className="flex gap-4">
-                  <div className="relative">
-                    <div className="text-3xl">{pro.avatar}</div>
-                    {pro.isOnline && (
-                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-success rounded-full border-2 border-card"></div>
-                    )}
-                  </div>
-                  
-                  <div className="flex-1 space-y-2">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h3 className="font-semibold text-foreground">{pro.name}</h3>
-                        <p className="text-primary font-medium text-sm">{pro.service}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-foreground">${pro.hourlyRate}</div>
-                        <div className="text-xs text-muted-foreground">per hour</div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                        <span className="font-medium">{pro.rating}</span>
-                        <span>({pro.reviews})</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {pro.location}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1">
-                      {pro.skills.slice(0, 2).map((skill, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs px-2 py-0.5">
-                          {skill}
-                        </Badge>
-                      ))}
-                      {pro.skills.length > 2 && (
-                        <Badge variant="secondary" className="text-xs px-2 py-0.5">
-                          +{pro.skills.length - 2} more
-                        </Badge>
-                      )}
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Button className="mobile-button flex-1" size="sm">
-                        Book Now
-                      </Button>
-                      <Button variant="outline" size="sm" className="mobile-button">
-                        <MessageCircle className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+          {loading ? (
+            <div className="flex justify-center items-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          ) : error ? (
+            <Card className="mobile-card">
+              <CardContent className="p-4 text-center">
+                <p className="text-destructive text-sm mb-2">{error}</p>
+                <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+                  Try Again
+                </Button>
               </CardContent>
             </Card>
-          ))}
+          ) : professionals.length === 0 ? (
+            <Card className="mobile-card">
+              <CardContent className="p-4 text-center">
+                <p className="text-muted-foreground text-sm">No professionals available at the moment.</p>
+              </CardContent>
+            </Card>
+          ) : (
+            professionals.map((pro) => (
+              <Card key={pro.id} className="mobile-card">
+                <CardContent className="p-4">
+                  <div className="flex gap-4">
+                    <div className="relative">
+                      {pro.avatar_url ? (
+                        <img src={pro.avatar_url} alt={pro.full_name || 'Professional'} className="w-10 h-10 rounded-full object-cover" />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+                          {pro.full_name?.charAt(0) || '?'}
+                        </div>
+                      )}
+                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-success rounded-full border-2 border-card"></div>
+                    </div>
+                    
+                    <div className="flex-1 space-y-2">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="font-semibold text-foreground">{pro.full_name}</h3>
+                          <p className="text-primary font-medium text-sm">{pro.service_type}</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-lg font-bold text-foreground">${pro.hourly_rate || 0}</div>
+                          <div className="text-xs text-muted-foreground">per hour</div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                          <span className="font-medium">{pro.rating || 0}</span>
+                          <span>({pro.total_jobs || 0})</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <MapPin className="h-3 w-3" />
+                          {pro.location || 'Location not specified'}
+                        </div>
+                      </div>
+
+                      {pro.skills && pro.skills.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {pro.skills.slice(0, 2).map((skill, index) => (
+                            <Badge key={index} variant="secondary" className="text-xs px-2 py-0.5">
+                              {skill}
+                            </Badge>
+                          ))}
+                          {pro.skills.length > 2 && (
+                            <Badge variant="secondary" className="text-xs px-2 py-0.5">
+                              +{pro.skills.length - 2} more
+                            </Badge>
+                          )}
+                        </div>
+                      )}
+
+                      <div className="flex gap-2">
+                        <Button className="mobile-button flex-1" size="sm">
+                          Book Now
+                        </Button>
+                        <Button variant="outline" size="sm" className="mobile-button">
+                          <MessageCircle className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
       </div>
     </div>

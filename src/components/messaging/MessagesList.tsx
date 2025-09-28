@@ -80,9 +80,11 @@ export const MessagesList: React.FC<MessagesListProps> = ({
         conv.user_id === currentUser.user.id ? conv.professional_id : conv.user_id
       );
 
+      // Use the secure professional_public_profiles view that excludes phone numbers
+      // or fetch only non-sensitive fields from profiles
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
-        .select('user_id, full_name, user_type')
+        .select('user_id, full_name, user_type, avatar_url')
         .in('user_id', recipientIds);
 
       if (profilesError) throw profilesError;
